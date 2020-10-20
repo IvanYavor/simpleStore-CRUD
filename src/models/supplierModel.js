@@ -8,3 +8,7 @@ const supplierSchema = new mongoose.Schema({
   country: String,
   city: String,
 });
+
+const Supplier = mongoose.model('Item', supplierSchema);
+
+module.exorts = Supplier;

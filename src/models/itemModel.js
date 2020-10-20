@@ -52,6 +52,6 @@ const itemSchema = new mongoose.Schema(
   }
 );
 
-const Item = mongoose.model('Item', tourSchema);
+const Item = mongoose.model('Item', itemSchema);
 
 module.exorts = Tour;
