@@ -8,6 +8,10 @@ const supplierSchema = new mongoose.Schema(
     },
     country: String,
     city: String,
+    items: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Item',
+    },
   },
   {
     toJSON: { virtuals: true, toObject: { virtuals: true } },
