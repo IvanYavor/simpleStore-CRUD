@@ -117,4 +117,4 @@ dist
 
 
 .vscode
-config.env
+src/config/config.env
