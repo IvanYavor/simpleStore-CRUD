@@ -1,6 +1,8 @@
 const Supplier = require('../models/supplierModel');
+const catchAsync = require('../helpers/catchAsync');
+const AppError = require('../helpers/appError');
 
-exports.getAllSuppliers = async (req, res, next) => {
+exports.getAllSuppliers = catchAsync(async (req, res, next) => {
   const suppliers = await Supplier.find();
 
   res.status(200).json({
@@ -10,14 +12,13 @@ exports.getAllSuppliers = async (req, res, next) => {
       suppliers,
     },
   });
-};
+});
 
-exports.getSupplier = async (req, res, next) => {
+exports.getSupplier = catchAsync(async (req, res, next) => {
   const supplier = await Supplier.findById(req.params.id);
 
   if (!supplier) {
-    //   TODO: custom error
-    return next(new Error('No supplier found with this id'));
+    return next(new AppError('No supplier found with this id', 404));
   }
 
   res.status(200).json({
@@ -26,9 +27,9 @@ exports.getSupplier = async (req, res, next) => {
       supplier,
     },
   });
-};
+});
 
-exports.createSupplier = async (req, res, next) => {
+exports.createSupplier = catchAsync(async (req, res, next) => {
   const newSupplier = await Supplier.create(req.body);
 
   res.status(201).json({
@@ -37,16 +38,15 @@ exports.createSupplier = async (req, res, next) => {
       supplier: newSupplier,
     },
   });
-};
+});
 
-exports.updateSupplier = async (req, res, next) => {
+exports.updateSupplier = catchAsync(async (req, res, next) => {
   const supplier = await Supplier.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
 
   if (!supplier) {
-    //TODO: custom error
-    return next(new Error('No supplier found with this id'));
+    return next(new AppError('No supplier found with this id', 404));
   }
 
   res.status(200).json({
@@ -55,18 +55,17 @@ exports.updateSupplier = async (req, res, next) => {
       supplier,
     },
   });
-};
+});
 
-exports.deleteSupplier = async (req, res, next) => {
+exports.deleteSupplier = catchAsync(async (req, res, next) => {
   const supplier = await Supplier.findByIdAndDelete(req.params.id);
 
   if (!supplier) {
-    //   TODO: custom error
-    return next(new Error('No supplier found with this id'));
+    return next(new AppError('No supplier found with this id', 404));
   }
 
   res.status(204).json({
     status: 'success',
     data: null,
   });
-};
+});

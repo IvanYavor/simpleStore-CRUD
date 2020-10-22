@@ -1,6 +1,8 @@
 const Item = require('../models/itemModel');
+const catchAsync = require('../helpers/catchAsync');
+const AppError = require('../helpers/appError');
 
-exports.getAllItems = async (req, res, next) => {
+exports.getAllItems = catchAsync(async (req, res, next) => {
   const items = await Item.find();
 
   res.status(200).json({
@@ -10,14 +12,13 @@ exports.getAllItems = async (req, res, next) => {
       items,
     },
   });
-};
+});
 
-exports.getItem = async (req, res, next) => {
+exports.getItem = catchAsync(async (req, res, next) => {
   const item = await Item.findById(req.params.id);
 
   if (!item) {
-    //   TODO: custom error
-    return next(new Error('No item found with this id'));
+    return next(new AppError('No item found with this id', 404));
   }
 
   res.status(200).json({
@@ -26,9 +27,9 @@ exports.getItem = async (req, res, next) => {
       item,
     },
   });
-};
+});
 
-exports.createItem = async (req, res, next) => {
+exports.createItem = catchAsync(async (req, res, next) => {
   const newItem = await Item.create(req.body);
 
   res.status(201).json({
@@ -37,16 +38,15 @@ exports.createItem = async (req, res, next) => {
       item: newItem,
     },
   });
-};
+});
 
-exports.updateItem = async (req, res, next) => {
+exports.updateItem = catchAsync(async (req, res, next) => {
   const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
 
   if (!item) {
-    //TODO: custom error
-    return next(new Error('No item found with this id'));
+    return next(new AppError('No item found with this id', 404));
   }
 
   res.status(200).json({
@@ -55,18 +55,17 @@ exports.updateItem = async (req, res, next) => {
       item,
     },
   });
-};
+});
 
-exports.deleteItem = async (req, res, next) => {
+exports.deleteItem = catchAsync(async (req, res, next) => {
   const item = await Item.findByIdAndDelete(req.params.id);
 
   if (!item) {
-    //   TODO: custom error
-    return next(new Error('No item found with this id'));
+    return next(new AppError('No item found with this id', 404));
   }
 
   res.status(204).json({
     status: 'success',
     data: null,
   });
-};
+});
